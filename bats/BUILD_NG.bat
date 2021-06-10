@@ -3,9 +3,9 @@ echo BUILDING CARTRIP TO NG
 cd ..
 lime build html5 -final -Dng
 echo DELETING OLD ZIP
-cd export
+cd export/final/html5/bin
 del CarTrip_NG.zip
 echo ZIPPING CARTRIP
-7z a -tzip -r CarTrip_NG final/html5/bin
+7z a -tzip -r CarTrip_NG
 echo DONE
 pause

@@ -4,8 +4,6 @@ import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.util.FlxAxes;
 
-using flixel.util.FlxSpriteUtil;
-
 class Player extends FlxSprite
 {
 	public var SPEED:Int = 200;
@@ -18,12 +16,13 @@ class Player extends FlxSprite
 		setGraphicSize(32);
 		setSize(32, 25);
 		centerOffsets();
+
+		FlxG.watch.add(this, "y", "Pos");
 	}
 
 	override public function update(elapsed:Float)
 	{
 		controls();
-		this.bound();
 		super.update(elapsed);
 	}
 

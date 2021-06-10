@@ -11,7 +11,7 @@ import flixel.FlxSprite;
  */
 class Enemy extends FlxSprite
 {
-	public var SPEED:Int = -200;
+	public var SPEED:Int = -300;
 	public var TYPE:EnemyType;
 
 	public function new()
@@ -41,7 +41,7 @@ class Enemy extends FlxSprite
 	function generate()
 	{
 		x = FlxG.width;
-		y = FlxG.random.int(0, FlxG.height);
+		y = FlxG.random.int(33, 660);
 
 		if (FlxG.random.bool(5))
 		{
@@ -62,8 +62,8 @@ class Enemy extends FlxSprite
 				velocity.x = SPEED;
 			case TRUCK:
 				loadGraphic(AssetPaths.Truck__png);
-				setGraphicSize(32);
-				setSize(32, 25);
+				setGraphicSize(69);
+				setSize(69, 48);
 				centerOffsets();
 				velocity.x = SPEED - 200;
 		}

@@ -9,12 +9,13 @@ import flixel.util.FlxTimer;
 
 class PlayState extends FlxState
 {
+	public static var points:Int = 0;
+
 	var _enemygroup:FlxTypedGroup<Enemy>;
 	var _player:Player;
 	var _spawntimer:Float = 0;
 	var _hardtimer:FlxTimer = new FlxTimer();
 	var _potence:Float = 1;
-	var _points:Int = 0;
 	var _pointtxt:FlxText;
 	var _pointtimer:FlxTimer = new FlxTimer();
 	var _bg:BG;
@@ -29,7 +30,7 @@ class PlayState extends FlxState
 
 		_player = new Player();
 
-		_pointtxt = new FlxText(0, 0, 0, Std.string(_points), 24);
+		_pointtxt = new FlxText(0, 0, 0, Std.string(points), 24);
 
 		_bg = new BG();
 
@@ -41,15 +42,15 @@ class PlayState extends FlxState
 		_hardtimer.start(5, harder, 0);
 		_pointtimer.start(1, function morepoints(timer:FlxTimer)
 		{
-			_points++;
-			_pointtxt.text = Std.string(_points);
+			points++;
+			_pointtxt.text = Std.string(points);
 		}, 0);
 	}
 
 	override public function update(elapsed:Float)
 	{
 		_spawntimer += elapsed * _potence;
-		if (_spawntimer > 1)
+		if (_spawntimer > 1 && _player.alive)
 		{
 			_spawntimer--;
 			_enemygroup.add(_enemygroup.recycle(Enemy.new));
@@ -58,13 +59,16 @@ class PlayState extends FlxState
 		super.update(elapsed);
 
 		FlxG.collide(_player, _enemygroup, endgame);
+		FlxG.collide(_player, _bg);
 	}
 
 	function endgame(theplayer:Player, theenemy:FlxBasic)
 	{
+		_player.kill();
+		_bg.track.animation.stop();
 		_pointtimer.cancel();
 		_hardtimer.cancel();
-		FlxG.resetState();
+		openSubState(new DeathSubState());
 	}
 
 	function harder(timer:FlxTimer)

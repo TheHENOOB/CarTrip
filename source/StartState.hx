@@ -6,6 +6,7 @@ import flixel.FlxState;
 import flixel.text.FlxText;
 import flixel.util.FlxColor;
 import flixel.util.FlxTimer;
+import io.newgrounds.NG;
 
 class StartState extends FlxState
 {
@@ -18,10 +19,6 @@ class StartState extends FlxState
 	override function create()
 	{
 		super.create();
-
-		#if ng
-		new NGio(APIStuff.GAMEID, APIStuff.ENCKEY, #if FLX_DEBUG true #else false #end);
-		#end
 
 		FlxG.cameras.bgColor = FlxColor.BLACK;
 
