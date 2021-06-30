@@ -16,8 +16,6 @@ class Player extends FlxSprite
 		setGraphicSize(32);
 		setSize(32, 25);
 		centerOffsets();
-
-		FlxG.watch.add(this, "y", "Pos");
 	}
 
 	override public function update(elapsed:Float)
@@ -39,6 +37,10 @@ class Player extends FlxSprite
 		if (down)
 		{
 			velocity.y = SPEED;
+		}
+		if (up && down)
+		{
+			velocity.y = 0;
 		}
 	}
 }

@@ -2,17 +2,23 @@ package;
 
 import flixel.FlxG;
 import flixel.FlxSprite;
+import flixel.tweens.FlxTween;
+
+using flixel.util.FlxSpriteUtil;
 
 /*
 	TODO LIST on Enemy Class:
 
 	- Make Collisions to other cars
-	- Make Truck Bigger
  */
 class Enemy extends FlxSprite
 {
-	public var SPEED:Int = -300;
+	public var SPEED:Int = 300;
 	public var TYPE:EnemyType;
+	public var isDamaged:Bool = false;
+
+	var _nospam:Bool = false;
+	var _rotatetween:FlxTween;
 
 	public function new()
 	{
@@ -28,76 +34,89 @@ class Enemy extends FlxSprite
 
 	override public function update(elapsed:Float)
 	{
-		if (x <= -10)
+		if (x <= -10 && TYPE != ORANGECAR)
 		{
 			kill();
 		}
 
-		super.update(elapsed);
+		if (TYPE == ORANGECAR && x >= FlxG.width + 10)
+		{
+			kill();
+		}
 
-		FlxG.collide(this, this, onCarGotHit);
+		if (TYPE == ORANGECAR && x < -5 && !_nospam)
+		{
+			var alert:FlxSprite = new FlxSprite();
+			alert.loadGraphic(AssetPaths.OrangeAlert__png);
+			alert.x = FlxG.width - 25;
+			alert.y = y;
+			alert.flicker(0);
+			FlxG.state.add(alert);
+
+			if (x > -5 || PlayState.gameended)
+			{
+				alert.kill();
+				FlxG.state.remove(alert);
+
+				_nospam = true;
+			}
+		}
+
+		if (velocity.x >= 0 && TYPE != ORANGECAR)
+		{
+			velocity.x = SPEED;
+		}
+
+		if (isDamaged)
+		{
+			damaged();
+		}
+
+		super.update(elapsed);
 	}
 
 	function generate()
 	{
-		x = FlxG.width;
-		y = FlxG.random.int(33, 660);
+		var cartypearray:Array<EnemyType> = [BLUECAR, TRUCK, ORANGECAR];
 
-		if (FlxG.random.bool(5))
-		{
-			TYPE = TRUCK;
-		}
-		else
-		{
-			TYPE = BLUECAR;
-		}
+		_nospam = false;
+
+		y = FlxG.random.int(34, 660);
+
+		TYPE = FlxG.random.getObject(cartypearray, [80, 10, 10]);
 
 		switch (TYPE)
 		{
 			case BLUECAR:
+				x = FlxG.width;
 				loadGraphic(AssetPaths.BluCar__png);
 				setGraphicSize(32);
 				setSize(32, 25);
 				centerOffsets();
-				velocity.x = SPEED;
+				velocity.x = -SPEED;
 			case TRUCK:
+				x = FlxG.width;
 				loadGraphic(AssetPaths.Truck__png);
 				setGraphicSize(69);
 				setSize(69, 48);
 				centerOffsets();
-				velocity.x = SPEED - 200;
+				velocity.x = -SPEED - 200;
+			case ORANGECAR:
+				x = -30;
+				loadGraphic(AssetPaths.OrangeCar__png);
+				setGraphicSize(32);
+				setSize(32, 25);
+				centerOffsets();
+				velocity.x = SPEED + 100;
 		}
 	}
 
-	function onCarGotHit(enemy1:Enemy, enemy2:Enemy)
-	{
-		if (enemy1.x < enemy2.x)
-		{
-			if (FlxG.random.bool(50))
-			{
-				enemy1.velocity.y = 100;
-			}
-			else
-			{
-				enemy1.velocity.y = -100;
-			}
-		}
-		else if (enemy1.x > enemy2.x)
-		{
-			if (FlxG.random.bool(50))
-			{
-				enemy2.velocity.y = 100;
-			}
-			else
-			{
-				enemy2.velocity.y = -100;
-			}
-		}
-	}
+	function damaged() {}
 }
 
 enum EnemyType
 {
 	BLUECAR;
 	TRUCK;
+	ORANGECAR;
 }

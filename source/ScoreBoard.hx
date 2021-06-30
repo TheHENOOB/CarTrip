@@ -4,6 +4,7 @@ import flixel.FlxSprite;
 import flixel.group.FlxGroup;
 import flixel.text.FlxText;
 import flixel.util.FlxColor;
+import io.newgrounds.NG;
 
 class ScoreBoard extends FlxTypedGroup<FlxSprite>
 {
@@ -14,6 +15,7 @@ class ScoreBoard extends FlxTypedGroup<FlxSprite>
 	var _counter:Int = 0;
 	var _supporter:Bool = true;
 	var _title:FlxText = new FlxText(0, 0, 0, "", 25);
+	var _isng:Bool = #if ng true #else false #end;
 
 	public function new()
 	{
@@ -25,25 +27,36 @@ class ScoreBoard extends FlxTypedGroup<FlxSprite>
 		_background.y += 100;
 		add(_background);
 
-		_yposition = _background.y;
-
-		for (_counter in 0...10)
+		if (_isng)
 		{
-			_userarray.push(new FlxText(_background.x, _yposition, 0, "", 25));
-			_userarray[_counter].text = Std.string(_counter + 1) + ". SevenTheEasterBunny";
-			if (_supporter)
+			_yposition = _background.y;
+
+			for (_counter in 0...10)
 			{
-				var _imgS:FlxSprite = new FlxSprite(_userarray[_counter].x + _userarray[_counter].width, _yposition + 3);
-				_imgS.loadGraphic(AssetPaths.Supporter__png);
-				add(_imgS);
+				_userarray.push(new FlxText(_background.x, _yposition, 0, "", 25));
+				_userarray[_counter].text = Std.string(_counter + 1) + ". SevenTheEasterBunny";
+				if (_supporter)
+				{
+					var _imgS:FlxSprite = new FlxSprite(_userarray[_counter].x + _userarray[_counter].width, _yposition + 3);
+					_imgS.loadGraphic(AssetPaths.Supporter__png);
+					add(_imgS);
+				}
+				add(_userarray[_counter]);
+
+				_pointsarray.push(new FlxText(_background.x + _background.width - 53, _yposition, 0, "", 25));
+				_pointsarray[_counter].text = Std.string(120);
+				add(_pointsarray[_counter]);
+
+				_yposition += 35;
 			}
-			add(_userarray[_counter]);
-
-			_pointsarray.push(new FlxText(_background.x + _background.width - 53, _yposition, 0, "", 25));
-			_pointsarray[_counter].text = Std.string(120);
-			add(_pointsarray[_counter]);
-
-			_yposition += 35;
+		}
+		else
+		{
+			var _nopetxt:FlxText = new FlxText(0, 0, 0, "Play the NG version of the game \nto display the scoreboards", 25);
+			_nopetxt.alignment = CENTER;
+			_nopetxt.screenCenter();
+			_nopetxt.y += 30;
+			add(_nopetxt);
 		}
 
 		_title.setPosition(_background.x, _background.y - 35);

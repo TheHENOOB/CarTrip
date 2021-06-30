@@ -14,13 +14,16 @@ class NGio
 	 * @param ENCKEY The encryption key of the game, is optional if you don't want a ENCKEY but is heavily recommended to use it.
 	 * also the cipher is set to RC4 and the encryption format is set to BASE64 remember to save those on the page of your game 
 	 * (Other ciphers and encryption formats aren't implemented yet)
-	 * @param VERBOSE This function makes NG run in a "Debug" like mode, if you don't know what this does you should check out your browser console
-	 * remember to always turn it false after finishing the game, this can reveal your gameid to the public
+	 * @param VERBOSE It makes the game run on verbose mode, opening the browser console you will see stuff like Medals, Scoreboards, 
+	 * and User Logins, good for testing and debugging, but is recommended to when releasing the game always remember to turn verbose
+	 * to false because verbose reveals API ID and maybe Encryption Key, if your game has scoreboards or "hard to get" medals
+	 * you probably gonna have to be careful
 	 */
-	public function new(GAMEID:String, ENCKEY:String, DEBUG:Bool = false)
+	public function new(GAMEID:String, ENCKEY:String, VERBOSE:Bool = false)
 	{
-		NG.createAndCheckSession(GAMEID, DEBUG);
+		NG.createAndCheckSession(GAMEID);
 		NG.core.initEncryption(ENCKEY);
+		NG.core.verbose = VERBOSE;
 		NG.core.requestMedals(onMedalLoad);
 		NG.core.requestScoreBoards(onScoreBoardLoad);
 	}
