@@ -16,12 +16,17 @@ class DeathSubState extends FlxSubState
 	var _continuetext:FlxText = new FlxText(0, 0, 0, "Press Enter To Restart", 30);
 	var _save:FlxSave = new FlxSave();
 	var _chashsound:FlxSound = Utils.getAudioByName("crash");
+	var _startsound:FlxSound = Utils.getAudioByName("start");
+	var _restartready:Bool = false;
+	var _totaldeaths:FlxText = new FlxText(0, 0, 0, "", 20);
 
 	public function new()
 	{
 		super(0x991f1f1f);
 
 		_save.bind("CarTrip");
+
+		FlxG.sound.music.fadeOut(1, 0.3);
 
 		if (_save.data.deaths == null)
 		{
@@ -39,21 +44,36 @@ class DeathSubState extends FlxSubState
 		}
 
 		#if ng
-		if (_save.data.deaths == 25)
+		NGio.sendScore(APIStuff.SCOREBOARDID, PlayState.points);
+
+		if (_save.data.deaths >= 15)
 		{
 			NGio.unlockMedal(63645);
+		}
+
+		if (PlayState.points >= 25)
+		{
+			NGio.unlockMedal(63973);
 		}
 
 		if (PlayState.points >= 50)
 		{
 			NGio.unlockMedal(63646);
 		}
+
+		if (PlayState.points >= 60)
+		{
+			NGio.unlockMedal(64414);
+		}
 		#end
 
 		FlxG.state.persistentUpdate = true;
 
 		_chashsound.play();
-		FlxG.cameras.flash(FlxColor.WHITE, 2);
+		FlxG.cameras.flash(FlxColor.WHITE, 2, function()
+		{
+			_restartready = true;
+		});
 		FlxG.cameras.shake(0.005, 1.5);
 
 		add(_scoreboard);
@@ -64,13 +84,15 @@ class DeathSubState extends FlxSubState
 		_scoretext.y -= 200;
 		add(_scoretext);
 
+		_totaldeaths.text = "TOTAL DEATHS: " + getDeaths();
+		_totaldeaths.alignment = CENTER;
+		_totaldeaths.screenCenter();
+		_totaldeaths.y -= 120;
+		add(_totaldeaths);
+
 		_continuetext.screenCenter();
 		_continuetext.y += 320;
 		add(_continuetext);
-
-		#if ng
-		NGio.sendScore(APIStuff.SCOREBOARDID, PlayState.points);
-		#end
 
 		FlxTween.tween(_continuetext, {y: _continuetext.y + 10}, 1.5, {type: PINGPONG, ease: FlxEase.quadInOut});
 
@@ -92,7 +114,7 @@ class DeathSubState extends FlxSubState
 
 	override function update(elapsed:Float)
 	{
-		if (FlxG.keys.justPressed.ENTER || FlxG.keys.justPressed.SPACE)
+		if (FlxG.keys.justPressed.ENTER && _restartready)
 		{
 			restart();
 		}
@@ -103,13 +125,17 @@ class DeathSubState extends FlxSubState
 	function getHighScore():String
 	{
 		if (_save.data.highscore != null)
-		{
 			return Std.string(_save.data.highscore);
-		}
 		else
-		{
 			return Std.string(0);
-		}
+	}
+
+	function getDeaths():String
+	{
+		if (_save.data.deaths != null)
+			return Std.string(_save.data.deaths);
+		else
+			return Std.string(0);
 	}
 
 	function savepoints()
@@ -120,6 +146,8 @@ class DeathSubState extends FlxSubState
 
 	function restart()
 	{
+		_startsound.play();
+
 		PlayState.pixeltween.type = FlxTweenType.BACKWARD;
 		PlayState.pixeltween.onComplete = function reset(thetween:FlxTween)
 		{

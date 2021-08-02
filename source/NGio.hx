@@ -3,7 +3,7 @@ package;
 import io.newgrounds.NG;
 
 /**
- * This class is HENOOB's version of Geokureli's NGio script
+ * This class is CarTrip's version of Geokureli's NGio script
  */
 class NGio
 {
@@ -74,5 +74,13 @@ class NGio
 			return NG.core.user.name;
 		else
 			return null;
+	}
+
+	public static function isConnected():Bool
+	{
+		if (NG.core.loggedIn)
+			return true;
+		else
+			return false;
 	}
 }

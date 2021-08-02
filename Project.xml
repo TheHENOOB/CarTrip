@@ -4,7 +4,7 @@
 
 	<!-- _________________________ Application Settings _________________________ -->
 
-	<app title="CarTrip" file="CarTrip" main="Main" version="0.0.1" company="HENOOB" package="com.henoob.cartrip"/>
+	<app title="Car Trip" file="CarTrip" main="Main" version="0.0.1" company="HENOOB" package="com.henoob.cartrip"/>
 
 	<!--The flixel preloader is not accurate in Chrome. You can use it regularly if you embed the swf into a html file
 		or you can set the actual size of your file manually at "FlxPreloaderBase-onUpdate-bytesTotal"-->
@@ -32,14 +32,17 @@
 	<set name="BUILD_DIR" value="export/debug" if="debug" />
 	<set name="BUILD_DIR" value="export/release" if="release" />
 	<set name="BUILD_DIR" value="export/final" if="final" />
+
 	<source path="source" />
-	<assets path="assets" />
+
+	<assets path="assets" exclude="*.ogg" if="web" />
+	<assets path="assets" exclude="*.mp3" unless="web" />
 
 	<!-- _______________________________ Libraries ______________________________ -->
 
 	<haxelib name="flixel" />
 	<haxelib name="flixel-addons" />
-	<haxelib name="newgrounds" />
+	<haxelib name="newgrounds" if="ng" />
 
 	<!-- ______________________________ Haxedefines _____________________________ -->
 
@@ -71,9 +74,11 @@
 	<haxedef name="FLX_NO_DEBUG" unless="debug" />
 
 	<!--Enable this for Nape release builds for a serious peformance improvement-->
-	<haxedef name="NAPE_RELEASE_BUILD" unless="debug" />
+	<!--<haxedef name="NAPE_RELEASE_BUILD" unless="debug" />--> 
 
 	<!-- _________________________________ Custom _______________________________ -->
 
 	<!--Place custom nodes like icons here (higher priority to override the HaxeFlixel icon)-->
+
+	<icon path="assets/images/Icon.svg" />
 </project>

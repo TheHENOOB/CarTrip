@@ -4,7 +4,6 @@ import flixel.FlxG;
 import flixel.FlxObject;
 import flixel.FlxSprite;
 import flixel.addons.display.shapes.FlxShapeBox;
-import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.group.FlxSpriteGroup.FlxTypedSpriteGroup;
 import flixel.util.FlxAxes;
 import flixel.util.FlxColor;
@@ -13,6 +12,8 @@ class BG extends FlxTypedSpriteGroup<FlxSprite>
 {
 	public var track:FlxSprite;
 
+	// I could make own sprites for those two boxes and not use the flixel-addons
+	// but i thought it would take a lot of time to make those stuff work
 	var _boxup:FlxShapeBox;
 	var _boxdown:FlxShapeBox;
 

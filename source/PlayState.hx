@@ -2,6 +2,7 @@ package;
 
 import Mosaic.MosaicEffect;
 import flixel.FlxG;
+import flixel.FlxObject;
 import flixel.FlxState;
 import flixel.group.FlxSpriteGroup.FlxTypedSpriteGroup;
 import flixel.system.FlxSound;
@@ -29,13 +30,23 @@ class PlayState extends FlxState
 	var _pixelshader:MosaicEffect;
 
 	// Sound Variables
-	var _beatsound:FlxSound = Utils.getAudioByName("beat");
+	var _damagesound:FlxSound = Utils.getAudioByName("damage");
 
 	override public function create()
 	{
 		super.create();
 
 		FlxG.cameras.bgColor = 0xFF757575;
+
+		if (FlxG.sound.music == null)
+		{
+			FlxG.sound.playMusic(Utils.getMusicByName("gameplaytheme"), 1);
+		}
+
+		if (FlxG.sound.music != null && FlxG.sound.music.volume < 1)
+		{
+			FlxG.sound.music.volume = 1;
+		}
 
 		_enemygroup = new FlxTypedSpriteGroup<Enemy>();
 
@@ -54,6 +65,8 @@ class PlayState extends FlxState
 		});
 
 		_pointtxt.visible = true;
+
+		gameended = false;
 
 		add(_bg);
 		add(_enemygroup);
@@ -83,16 +96,16 @@ class PlayState extends FlxState
 		FlxG.collide(_enemygroup, _bg);
 		FlxG.collide(_player, _enemygroup, endgame);
 
-		_enemygroup.forEach(carCollision);
+		_enemygroup.forEach(enemyUpdate);
 	}
 
 	function endgame(?theplayer:Player, ?theenemy:Enemy)
 	{
 		_player.kill();
-		_pointtxt.visible = false;
 		if (!_player.alive && !gameended)
 		{
 			gameended = true;
+			_pointtxt.visible = false;
 			_bg.track.animation.stop();
 			_pointtimer.cancel();
 			_hardtimer.cancel();
@@ -106,43 +119,51 @@ class PlayState extends FlxState
 
 		_enemygroup.forEach(function SPEEED(theenemy:Enemy)
 		{
-			theenemy.SPEED -= 100;
+			theenemy.SPEED += 100;
 		});
 	}
 
-	function carCollision(_enemy:Enemy)
+	// Probably this is the thing that have taken more time then expected
+	function enemyUpdate(_enemy:Enemy)
 	{
-		if (_enemy.TYPE != ORANGECAR)
-			FlxG.collide(_enemy, _enemygroup, function onEnemyCollide(enemy1:Enemy, enemy2:Enemy)
+		FlxG.collide(_enemy, _enemygroup, function onEnemyCollide(enemy1:Enemy, enemy2:Enemy)
+		{
+			if ((enemy1.TYPE == BLUECAR && enemy2.TYPE == BLUECAR)
+				|| (enemy1.TYPE == TRUCK && enemy2.TYPE == TRUCK)
+				|| ((enemy1.TYPE == BLUECAR && enemy2.TYPE == TRUCK) && ((enemy1.x > enemy2.x) || !(enemy2.velocity.x <= -500)))
+				|| ((enemy2.TYPE == BLUECAR && enemy1.TYPE == TRUCK) && ((enemy2.x > enemy1.x) || !(enemy1.velocity.x <= -500))))
 			{
+				_damagesound.volume = 0.6;
+				_damagesound.play();
+
 				if (enemy1.x < enemy2.x)
 				{
-					if (enemy1.y < enemy2.y)
-					{
-						enemy1.velocity.y = -20;
-					}
-					else
-					{
-						enemy1.velocity.y = 20;
-					}
-
-					if (enemy1.TYPE == BLUECAR && enemy2.TYPE == TRUCK)
-					{
-						enemy1.isDamaged = true;
-					}
+					enemy1.velocity.x -= 50;
 				}
 				else
 				{
-					if (enemy2.y < enemy1.y)
-					{
-						enemy2.velocity.y = -20;
-					}
-					else
-					{
-						enemy2.velocity.y = 20;
-					}
+					enemy2.velocity.x -= 50;
 				}
-			});
+			}
+			else
+			{
+				if (enemy1.TYPE == TRUCK && enemy2.TYPE == BLUECAR)
+				{
+					enemy2.damaged();
+				}
+				else if (enemy2.TYPE == TRUCK && enemy1.TYPE == BLUECAR)
+				{
+					enemy1.damaged();
+				}
+			}
+		});
+
+		FlxG.overlap(_enemy, _player.box, function onBoxOverlap(enemy:Enemy, box:FlxObject) {});
+
+		if (gameended && !_enemy.isDamaged)
+		{
+			_enemy.velocity.x = Math.abs(_enemy.velocity.x);
+		}
 	}
 
 	function toggleShader(thetween:FlxTween)

@@ -3,10 +3,10 @@ package;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.FlxState;
+import flixel.system.FlxSound;
 import flixel.text.FlxText;
 import flixel.util.FlxColor;
 import flixel.util.FlxTimer;
-import io.newgrounds.NG;
 
 class StartState extends FlxState
 {
@@ -15,12 +15,15 @@ class StartState extends FlxState
 	var _henoobicon:FlxSprite = new FlxSprite();
 	var _jbicon:FlxSprite = new FlxSprite();
 	var _timer:FlxTimer = new FlxTimer();
+	var _introsound:FlxSound = Utils.getAudioByName("intro");
 
 	override function create()
 	{
 		super.create();
 
 		FlxG.cameras.bgColor = FlxColor.BLACK;
+
+		_introsound.play();
 
 		_credits.text = "Made By\nHENOOB";
 		_credits.alignment = CENTER;
@@ -64,6 +67,9 @@ class StartState extends FlxState
 
 	function goToGame(?timer:FlxTimer)
 	{
-		FlxG.switchState(new PlayState());
+		FlxG.cameras.fade(FlxColor.BLACK, 0.5, false, function()
+		{
+			FlxG.switchState(new MenuState());
+		});
 	}
 }

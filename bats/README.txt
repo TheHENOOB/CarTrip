@@ -1,0 +1,1 @@
+Those .bat files only work if you have 7-zip CLI downloaded and added to Windows Enviroment Variables, unless you know how to edit those bats
