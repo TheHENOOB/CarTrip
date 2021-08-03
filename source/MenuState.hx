@@ -100,7 +100,7 @@ class MenuState extends FlxState
 
 	function startgame()
 	{
-		var _mosaicShader:MosaicEffect = new MosaicEffect();
+		var _timer:FlxTimer = new FlxTimer();
 
 		_flashtimer.time = 0.1;
 
@@ -108,13 +108,18 @@ class MenuState extends FlxState
 		FlxG.sound.music = null;
 
 		_startsound.play();
-		FlxG.cameras.flash(FlxColor.WHITE, 0.5, function()
+		FlxG.cameras.flash(FlxColor.WHITE, 0.5);
+
+		_timer.start(0.5, flashComplete);
+	}
+
+	function flashComplete(timer:FlxTimer)
+	{
+		var _mosaicShader:MosaicEffect = new MosaicEffect();
+		FlxG.camera.setFilters([new ShaderFilter(_mosaicShader.shader)]);
+		FlxTween.num(0.1, 15, 1, {type: PERSIST, onComplete: onComplete}, function(v)
 		{
-			FlxG.camera.setFilters([new ShaderFilter(_mosaicShader.shader)]);
-			FlxTween.num(0.1, 15, 1, {type: PERSIST, onComplete: onComplete}, function(v)
-			{
-				_mosaicShader.setStrength(v, v);
-			});
+			_mosaicShader.setStrength(v, v);
 		});
 	}
 
