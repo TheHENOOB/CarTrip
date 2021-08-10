@@ -12,7 +12,6 @@ class Player extends FlxSprite
 {
 	public static inline var SPEED:Int = 250;
 
-	public var box:FlxObject;
 	public var explosion:FlxSprite = new FlxSprite();
 
 	public function new()
@@ -23,9 +22,6 @@ class Player extends FlxSprite
 		setGraphicSize(32);
 		setSize(32, 25);
 		centerOffsets();
-
-		box = new FlxObject(0, 0, this.width, this.height * 2);
-		FlxG.state.add(box);
 
 		explosion.loadGraphic(AssetPaths.Kaboom__png, true, 20, 20);
 		explosion.animation.add('kaboom1', [0]);
@@ -40,8 +36,6 @@ class Player extends FlxSprite
 	override function update(elapsed:Float)
 	{
 		controls();
-
-		box.setPosition(this.x, this.y - (this.height / 2));
 
 		super.update(elapsed);
 	}
@@ -68,8 +62,6 @@ class Player extends FlxSprite
 		{
 			_emmiter.emitting = false;
 		});
-
-		box.kill();
 	}
 
 	function controls()

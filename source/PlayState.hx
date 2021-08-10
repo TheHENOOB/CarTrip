@@ -158,8 +158,6 @@ class PlayState extends FlxState
 			}
 		});
 
-		FlxG.overlap(_enemy, _player.box, function onBoxOverlap(enemy:Enemy, box:FlxObject) {});
-
 		if (gameended && !_enemy.isDamaged)
 		{
 			_enemy.velocity.x = Math.abs(_enemy.velocity.x);
