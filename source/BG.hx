@@ -7,6 +7,7 @@ import flixel.addons.display.shapes.FlxShapeBox;
 import flixel.group.FlxSpriteGroup.FlxTypedSpriteGroup;
 import flixel.util.FlxAxes;
 import flixel.util.FlxColor;
+import flixel.util.FlxDirectionFlags;
 
 class BG extends FlxTypedSpriteGroup<FlxSprite>
 {
@@ -22,12 +23,12 @@ class BG extends FlxTypedSpriteGroup<FlxSprite>
 		super();
 
 		_boxup = new FlxShapeBox(-5, -2, FlxG.width + 10, 35, {thickness: 3, color: FlxColor.WHITE}, FlxColor.GREEN);
-		_boxup.allowCollisions = FlxObject.ANY;
+		_boxup.allowCollisions = FlxDirectionFlags.ANY;
 		_boxup.immovable = true;
 		add(_boxup);
 
 		_boxdown = new FlxShapeBox(-5, FlxG.height - 35, FlxG.width + 10, 40, {thickness: 3, color: FlxColor.WHITE}, FlxColor.GREEN);
-		_boxdown.allowCollisions = FlxObject.ANY;
+		_boxdown.allowCollisions = FlxDirectionFlags.ANY;
 		_boxdown.immovable = true;
 		add(_boxdown);
 
@@ -37,7 +38,7 @@ class BG extends FlxTypedSpriteGroup<FlxSprite>
 		track.setGraphicSize(FlxG.width + 1200, 2);
 		track.animation.add('Runnin', [0, 1, 2, 3, 4, 5], 20, true);
 		track.animation.play('Runnin');
-		track.allowCollisions = FlxObject.NONE;
+		track.allowCollisions = FlxDirectionFlags.NONE;
 		add(track);
 	}
 
