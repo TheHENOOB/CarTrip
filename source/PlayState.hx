@@ -1,6 +1,10 @@
 package;
 
+#if !flash
 import Mosaic.MosaicEffect;
+#else
+import flixel.util.FlxColor;
+#end
 import flixel.FlxG;
 import flixel.FlxObject;
 import flixel.FlxState;
@@ -27,7 +31,9 @@ class PlayState extends FlxState
 	var _pointtxt:FlxText;
 	var _pointtimer:FlxTimer = new FlxTimer();
 	var _bg:BG;
+	#if !flash
 	var _pixelshader:MosaicEffect;
+	#end
 
 	// Sound Variables
 	var _damagesound:FlxSound = Utils.getAudioByName("damage");
@@ -56,6 +62,7 @@ class PlayState extends FlxState
 
 		_bg = new BG();
 
+		#if !flash
 		_pixelshader = new MosaicEffect();
 		FlxG.camera.setFilters([new ShaderFilter(_pixelshader.shader)]);
 
@@ -63,6 +70,9 @@ class PlayState extends FlxState
 		{
 			_pixelshader.setStrength(v, v);
 		});
+		#else
+		FlxG.cameras.fade(FlxColor.WHITE, 1, true);
+		#end
 
 		_pointtxt.visible = true;
 
@@ -164,8 +174,10 @@ class PlayState extends FlxState
 		}
 	}
 
-	function toggleShader(thetween:FlxTween)
+	#if !flash
+	function toggleShader(?thetween:FlxTween)
 	{
 		FlxG.camera.filtersEnabled = !FlxG.camera.filtersEnabled;
 	}
+	#end
 }

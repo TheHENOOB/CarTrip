@@ -1,6 +1,8 @@
 package;
 
+#if !flash
 import Mosaic.MosaicEffect;
+#end
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.FlxState;
@@ -115,15 +117,19 @@ class MenuState extends FlxState
 
 	function flashComplete(timer:FlxTimer)
 	{
+		#if !flash
 		var _mosaicShader:MosaicEffect = new MosaicEffect();
 		FlxG.camera.setFilters([new ShaderFilter(_mosaicShader.shader)]);
 		FlxTween.num(0.1, 15, 1, {type: PERSIST, onComplete: onComplete}, function(v)
 		{
 			_mosaicShader.setStrength(v, v);
 		});
+		#else
+		FlxG.cameras.fade(FlxColor.WHITE, 1, false, () -> onComplete());
+		#end
 	}
 
-	function onComplete(tween:FlxTween)
+	function onComplete(?tween:FlxTween)
 	{
 		FlxG.switchState(new PlayState());
 	}

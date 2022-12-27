@@ -1,3 +1,4 @@
+#if ng
 package;
 
 import io.newgrounds.NG;
@@ -84,3 +85,4 @@ class NGio
 			return false;
 	}
 }
+#end

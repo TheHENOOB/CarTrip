@@ -148,6 +148,7 @@ class DeathSubState extends FlxSubState
 	{
 		_startsound.play();
 
+		#if !flash
 		PlayState.pixeltween.type = FlxTweenType.BACKWARD;
 		PlayState.pixeltween.onComplete = function reset(thetween:FlxTween)
 		{
@@ -159,5 +160,15 @@ class DeathSubState extends FlxSubState
 			FlxG.camera.filtersEnabled = true;
 			PlayState.pixeltween.start();
 		});
+		#else
+		FlxG.cameras.flash(FlxColor.WHITE, 0.5, function()
+		{
+			FlxG.cameras.fade(FlxColor.WHITE, 0.5, false, () ->
+			{
+				close();
+				FlxG.resetState();
+			});
+		});
+		#end
 	}
 }

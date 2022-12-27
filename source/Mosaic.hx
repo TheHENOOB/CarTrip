@@ -1,3 +1,4 @@
+#if !flash
 package;
 
 import flixel.system.FlxAssets.FlxShader;
@@ -43,3 +44,4 @@ class MosaicEffect
 		shader.uBlocksize.value[1] = strengthY;
 	}
 }
+#end
