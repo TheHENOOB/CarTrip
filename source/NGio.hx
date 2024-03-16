@@ -23,18 +23,18 @@ class NGio
 	public function new(GAMEID:String, ENCKEY:String, VERBOSE:Bool = false)
 	{
 		NG.createAndCheckSession(GAMEID);
-		NG.core.initEncryption(ENCKEY);
+		NG.core.setupEncryption(ENCKEY);
 		NG.core.verbose = VERBOSE;
 		NG.core.requestMedals(onMedalLoad);
-		NG.core.requestScoreBoards(onScoreBoardLoad);
+		NG.core.scoreBoards.loadList(onScoreBoardLoad);
 	}
 
-	function onMedalLoad()
+	function onMedalLoad(_)
 	{
 		trace("MEDALS LOADED");
 	}
 
-	function onScoreBoardLoad()
+	function onScoreBoardLoad(_)
 	{
 		trace("SCOREBOARDS LOADED");
 	}

@@ -33,11 +33,10 @@ class BG extends FlxTypedSpriteGroup<FlxSprite>
 		add(_boxdown);
 
 		track = new FlxSprite();
-		track.loadGraphic(AssetPaths.Track__png, true, 75, 1);
+		// track.loadGraphic(AssetPaths.Track__png, true, 75, 1);
+		track.makeGraphic(75, 1, FlxColor.WHITE);
 		track.screenCenter(FlxAxes.Y);
 		track.setGraphicSize(FlxG.width + 1200, 2);
-		track.animation.add('Runnin', [0, 1, 2, 3, 4, 5], 20, true);
-		track.animation.play('Runnin');
 		track.allowCollisions = FlxDirectionFlags.NONE;
 		add(track);
 	}

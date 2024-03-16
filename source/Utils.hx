@@ -1,7 +1,7 @@
 package;
 
 import flixel.system.FlxAssets.FlxSoundAsset;
-import flixel.system.FlxSound;
+import flixel.sound.FlxSound;
 
 class Utils
 {

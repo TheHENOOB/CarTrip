@@ -7,7 +7,7 @@ import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.FlxState;
 import flixel.group.FlxSpriteGroup.FlxTypedSpriteGroup;
-import flixel.system.FlxSound;
+import flixel.sound.FlxSound;
 import flixel.text.FlxText;
 import flixel.tweens.FlxTween;
 import flixel.util.FlxAxes;
@@ -119,7 +119,7 @@ class MenuState extends FlxState
 	{
 		#if !flash
 		var _mosaicShader:MosaicEffect = new MosaicEffect();
-		FlxG.camera.setFilters([new ShaderFilter(_mosaicShader.shader)]);
+		FlxG.camera.filters = [new ShaderFilter(_mosaicShader.shader)];
 		FlxTween.num(0.1, 15, 1, {type: PERSIST, onComplete: onComplete}, function(v)
 		{
 			_mosaicShader.setStrength(v, v);

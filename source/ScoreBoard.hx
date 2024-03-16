@@ -32,7 +32,7 @@ class ScoreBoard extends FlxTypedGroup<FlxSprite>
 		add(_background);
 
 		#if ng
-		NG.core.requestScoreBoards(function onBoardLoad()
+		NG.core.scoreBoards.loadList(function onBoardLoad(_)
 		{
 			NG.core.scoreBoards.get(APIStuff.SCOREBOARDID).requestScores(10);
 		});

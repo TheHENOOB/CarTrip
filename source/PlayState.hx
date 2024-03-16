@@ -9,7 +9,7 @@ import flixel.FlxG;
 import flixel.FlxObject;
 import flixel.FlxState;
 import flixel.group.FlxSpriteGroup.FlxTypedSpriteGroup;
-import flixel.system.FlxSound;
+import flixel.sound.FlxSound;
 import flixel.text.FlxText;
 import flixel.tweens.FlxTween;
 import flixel.util.FlxTimer;
@@ -64,7 +64,7 @@ class PlayState extends FlxState
 
 		#if !flash
 		_pixelshader = new MosaicEffect();
-		FlxG.camera.setFilters([new ShaderFilter(_pixelshader.shader)]);
+		FlxG.camera.filters = [new ShaderFilter(_pixelshader.shader)];
 
 		pixeltween = FlxTween.num(15, 0.1, 1, {type: PERSIST, onComplete: toggleShader}, function(v)
 		{
