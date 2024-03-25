@@ -13,6 +13,8 @@ class BG extends FlxTypedSpriteGroup<FlxSprite>
 {
 	public var track:FlxSprite;
 
+	public var trackSpeed:Float;
+
 	// I could make own sprites for those two boxes and not use the flixel-addons
 	// but i thought it would take a lot of time to make those stuff work
 	var _boxup:FlxShapeBox;
@@ -33,16 +35,21 @@ class BG extends FlxTypedSpriteGroup<FlxSprite>
 		add(_boxdown);
 
 		track = new FlxSprite();
-		// track.loadGraphic(AssetPaths.Track__png, true, 75, 1);
-		track.makeGraphic(75, 1, FlxColor.WHITE);
+		track.loadGraphic(AssetPaths.RoadTrack__png, true, 75, 1);
 		track.screenCenter(FlxAxes.Y);
 		track.setGraphicSize(FlxG.width + 1200, 2);
+		track.animation.add('Runnin', [0, 1, 2, 3, 4, 5], 20, true);
+		track.animation.play('Runnin');
 		track.allowCollisions = FlxDirectionFlags.NONE;
 		add(track);
+
+		trackSpeed = 0.5;
 	}
 
 	override public function update(elapsed:Float)
 	{
+		track.animation.timeScale = trackSpeed;
+
 		super.update(elapsed);
 	}
 }

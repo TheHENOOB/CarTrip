@@ -127,6 +127,8 @@ class PlayState extends FlxState
 	{
 		_potence++;
 
+		_bg.trackSpeed += 0.25;
+
 		_enemygroup.forEach(function SPEEED(theenemy:Enemy)
 		{
 			theenemy.SPEED += 100;
