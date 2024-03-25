@@ -5,7 +5,6 @@ import Mosaic.MosaicEffect;
 #end
 import flixel.FlxG;
 import flixel.FlxSprite;
-import flixel.FlxState;
 import flixel.group.FlxSpriteGroup.FlxTypedSpriteGroup;
 import flixel.sound.FlxSound;
 import flixel.text.FlxText;
@@ -15,7 +14,7 @@ import flixel.util.FlxColor;
 import flixel.util.FlxTimer;
 import openfl.filters.ShaderFilter;
 
-class MenuState extends FlxState
+class MenuState extends BaseState
 {
 	var _logo:FlxSprite = new FlxSprite();
 	var _bg:BG;

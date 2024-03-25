@@ -15,7 +15,7 @@ import flixel.tweens.FlxTween;
 import flixel.util.FlxTimer;
 import openfl.filters.ShaderFilter;
 
-class PlayState extends FlxState
+class PlayState extends BaseState
 {
 	// Public Variables
 	public static var points:Int = 0;

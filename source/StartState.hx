@@ -8,7 +8,7 @@ import flixel.text.FlxText;
 import flixel.util.FlxColor;
 import flixel.util.FlxTimer;
 
-class StartState extends FlxState
+class StartState extends BaseState
 {
 	var _credits:FlxText = new FlxText(0, 0, 0, "", 60);
 	var _musiccredits:FlxText = new FlxText(0, 0, 0, "", 20);
